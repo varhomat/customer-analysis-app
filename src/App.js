@@ -1,22 +1,26 @@
-import './App.scss';
+import "./App.scss";
+import { useState, useEffect } from "react"
+import CustomerTable from "./components/CustomerTable/CustomerTable";
+import CustomerAPI from "./api/CustomerAPI.js";
 
 function App() {
+  const [page, setPage] = useState(1)
+  const [filter, setFilter] = useState('')
+  const [customers, setCustomers] = useState([])
+
+  const customerAPI = CustomerAPI();
+
+  useEffect(() => {
+    customerAPI.get({page, filter})
+      .then((customers) => setCustomers(customers.winstrom.adresar))
+  }, [page, filter])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>Customer analysis application</h1>
+      <CustomerTable 
+        customers={customers}
+      />
     </div>
   );
 }
